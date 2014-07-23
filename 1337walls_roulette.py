@@ -8,7 +8,7 @@ from subprocess import call
 from random import choice
 from PIL import Image, ImageFilter
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 __author__ = 'vanita5'
 
 __api_url__ = 'http://1337walls.w8l.org/api/?rows=image&count=500'
@@ -18,13 +18,17 @@ DEBUG = False
 VERBOSE = False
 
 def console_out(format_str, *args, **kwargs):
-    if VERBOSE:
+    if VERBOSE or DEBUG:
         print(format_str.format(*args, **kwargs))
         
 def console_debug(format_str, *args, **kwargs):
-    if DEBUG and VERBOSE:
+    if DEBUG:
         sys.stderr.write(format_str.format(*args, **kwargs))
         sys.stderr.write(os.linesep)
+        
+def console_error(format_str, *args, **kwargs):
+    sys.stderr.write(format_str.format(*args, **kwargs))
+    sys.stderr.write(os.linesep)
 
 def console():
     # http://docs.python.org/library/argparse.html#module-argparse
@@ -86,7 +90,10 @@ def console():
             return
     
     console_out("Setting background image...")
-    call(["nitrogen", "--set-zoom-fill", dir, "--save"])
+    try:
+        call(["nitrogen", "--set-zoom-fill", dir, "--save"])
+    except FileNotFoundError:
+        console_error("[ERROR] nitrogen needs to be installed!")
     
 if __name__ == "__main__":
     sys.exit(console())
