@@ -9,9 +9,6 @@ Installation
 ------------
 Dependencies:
 [nitrogen](https://wiki.archlinux.org/index.php/nitrogen)
-
-    pip install Pillow
-    pip install requests
     
 
 Install 1337walls_roulette:
