@@ -4,14 +4,15 @@ import os
 import sys
 import argparse
 import requests
-import tempfile
 from subprocess import call
 from random import choice
 from PIL import Image, ImageFilter
 
-__version__ = '0.1'
+__version__ = '0.1.1'
+__author__ = 'vanita5'
 
 __api_url__ = 'http://1337walls.w8l.org/api/?rows=image'
+__home_dir__ = os.path.expanduser("~") + '/.config/1337walls/'
 
 DEBUG = False
 VERBOSE = False
@@ -41,8 +42,9 @@ def console():
     VERBOSE = args.verbose
     blur = args.blur
     
-    # dependency test
-    
+    if not os.path.exists(__home_dir__):
+        console_debug("Creating directory {}", __home_dir__)
+        os.makedirs(__home_dir__)    
     
     console_out("Lurking on http://1337walls.w8l.org/...")
     r = requests.get(__api_url__)
@@ -64,7 +66,7 @@ def console():
             
     console_out("Download successful!")
     
-    dir = tempfile.gettempdir() + '/1337_wp'
+    dir = __home_dir__ + '1337_wp'
     with open(dir, 'wb') as f:
         for chunk in r.iter_content():
             f.write(chunk)
@@ -73,7 +75,7 @@ def console():
     
     if blur:
         console_out("Bluring image...")
-        dir = tempfile.gettempdir() + "/1337_wp_blurred.png"
+        dir = __home_dir__ + "1337_wp_blurred.png"
         try:
             original = Image.open(f.name)
             blured = original.filter(ImageFilter.BLUR)
@@ -84,7 +86,7 @@ def console():
             return
     
     console_out("Setting background image...")
-    call(["nitrogen", "--set-zoom-fill", dir])
+    call(["nitrogen", "--set-zoom-fill", dir, "--save"])
     
 if __name__ == "__main__":
     sys.exit(console())
