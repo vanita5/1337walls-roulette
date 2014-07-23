@@ -8,10 +8,10 @@ from subprocess import call
 from random import choice
 from PIL import Image, ImageFilter
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 __author__ = 'vanita5'
 
-__api_url__ = 'http://1337walls.w8l.org/api/?rows=image'
+__api_url__ = 'http://1337walls.w8l.org/api/?rows=image&count=500'
 __home_dir__ = os.path.expanduser("~") + '/.config/1337walls/'
 
 DEBUG = False
