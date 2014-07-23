@@ -1,0 +1,15 @@
+1337walls Roulette
+==================
+
+1337walls Roulette automatically downloads a random wallpaper from (http://1337walls.w8l.org/), blurs 
+the image and sets it as your wallpaper.
+This is intended for WM's like Openbox and uses nitrogen to set the desktop wallpaper!
+
+==Installation==
+Dependencies:
+
+    pip install Pillow
+    pip install requests
+    
+
+    python setup.py install
