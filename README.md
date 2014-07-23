@@ -1,11 +1,12 @@
 1337walls Roulette
 ==================
 
-1337walls Roulette automatically downloads a random wallpaper from (http://1337walls.w8l.org/), blurs 
+1337walls Roulette automatically downloads a random wallpaper from [1337walls](http://1337walls.w8l.org/), blurs 
 the image (optional) and sets it as your wallpaper.
 This is intended for WM's like Openbox and uses nitrogen to set the desktop wallpaper!
 
-==Installation==
+Installation
+------------
 Dependencies:
 [nitrogen](https://wiki.archlinux.org/index.php/nitrogen)
 
@@ -18,7 +19,8 @@ Install 1337walls_roulette:
     pip install git+https://github.com/vanita5/1337walls-roulette
     
     
-==Usage==
+Usage
+-----
 Just run the following command. Your background should change!
 
     1337walls_roulette
