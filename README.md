@@ -9,6 +9,8 @@ Installation
 ------------
 Dependencies:
 [nitrogen](https://wiki.archlinux.org/index.php/nitrogen)
+OR
+[Feh](https://wiki.archlinux.org/index.php/feh)
     
 
 Install 1337walls_roulette:
@@ -28,6 +30,7 @@ Options:
     -b, --blur          Blur the wallpaper
     -v, --verbose       Verbose output
     --debug             Even more output, for debug purposes
+    --use-feh           Use feh to set your wallpaper instead of nitrogen (standard)
     
 You can run this script on startup or setup a cronjob to update your background image automatically 
 after a period of time.
