@@ -7,7 +7,7 @@ from setuptools import setup
 import ast
 
 name = '1337walls_roulette'
-version = '0.1.3'
+version = '0.1.4'
 with open('{}.py'.format(name), 'rU') as f:
     for node in (n for n in ast.parse(f.read()).body if isinstance(n, ast.Assign)):
         node_name = node.targets[0]

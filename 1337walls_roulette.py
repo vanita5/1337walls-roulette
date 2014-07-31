@@ -5,13 +5,12 @@ import sys
 import argparse
 import requests
 from subprocess import call
-from random import choice
 from PIL import Image, ImageFilter
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 __author__ = 'vanita5'
 
-__api_url__ = 'http://1337walls.w8l.org/api/?rows=image&count=500'
+__api_url__ = 'http://1337walls.w8l.org/api/?rows=image&count=1&order_by=rand&format=raw'
 __home_dir__ = os.path.expanduser("~") + '/.config/1337walls/'
 
 DEBUG = False
@@ -37,7 +36,8 @@ def console():
     parser.add_argument("-v", "--verbose", dest="verbose", action='store_true', help="show output")
     parser.add_argument("-b", "--blur", dest="blur", action='store_true', help="blur the image")
     parser.add_argument("--debug", dest="debug", action='store_true', help="turn on more verbose output")
-    
+    parser.add_argument("--dry", dest="dry", action='store_true', help="dry run, does not run nitrogen/feh")
+   
     args = parser.parse_args()
     
     global DEBUG
@@ -45,6 +45,7 @@ def console():
     DEBUG = args.debug
     VERBOSE = args.verbose
     blur = args.blur
+    dry = args.dry
     
     if not os.path.exists(__home_dir__):
         console_debug("Creating directory {}", __home_dir__)
@@ -57,12 +58,8 @@ def console():
         console_out("Could not connect to the 1337walls API: {}", r.status_code)
         return
         
-    json = r.json()
-    image = choice(json)
-    url = image['image']
-    
-    console_out("Downloading image ({})", url)
-    r = requests.get(url, stream=True)
+    console_out("Downloading image ({})", r.text)
+    r = requests.get(r.text, stream=True)
     
     if r.status_code != 200:
         console_out("Could not download the image. Error code: {}", r.status_code)
@@ -89,11 +86,12 @@ def console():
             console_out("[PIL] Unable to load image")
             return
     
-    console_out("Setting background image...")
-    try:
-        call(["nitrogen", "--set-zoom-fill", dir, "--save"])
-    except FileNotFoundError:
-        console_error("[ERROR] nitrogen needs to be installed!")
+    if not dry:
+        console_out("Setting background image...")
+        try:
+            call(["nitrogen", "--set-zoom-fill", dir, "--save"])
+        except FileNotFoundError:
+            console_error("[ERROR] nitrogen needs to be installed!")
     
 if __name__ == "__main__":
     sys.exit(console())
