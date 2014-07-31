@@ -7,7 +7,7 @@ import requests
 from subprocess import call
 from PIL import Image, ImageFilter
 
-__version__ = '0.1.4'
+__version__ = '0.1.5'
 __author__ = 'vanita5'
 
 __api_url__ = 'http://1337walls.w8l.org/api/?rows=image&count=1&order_by=rand&format=raw'
@@ -37,6 +37,7 @@ def console():
     parser.add_argument("-b", "--blur", dest="blur", action='store_true', help="blur the image")
     parser.add_argument("--debug", dest="debug", action='store_true', help="turn on more verbose output")
     parser.add_argument("--dry", dest="dry", action='store_true', help="dry run, does not run nitrogen/feh")
+    parser.add_argument("--use-feh", dest="feh", action='store_true', help="use feh to set the wallpaper (standard: nitrogen)")
    
     args = parser.parse_args()
     
@@ -46,6 +47,7 @@ def console():
     VERBOSE = args.verbose
     blur = args.blur
     dry = args.dry
+    use_feh = args.feh
     
     if not os.path.exists(__home_dir__):
         console_debug("Creating directory {}", __home_dir__)
@@ -89,9 +91,13 @@ def console():
     if not dry:
         console_out("Setting background image...")
         try:
-            call(["nitrogen", "--set-zoom-fill", dir, "--save"])
+            if use_feh:
+                call(["feh", "--bg-fill", dir])
+            else:
+                call(["nitrogen", "--set-zoom-fill", dir, "--save"])
         except FileNotFoundError:
-            console_error("[ERROR] nitrogen needs to be installed!")
+            console_error("[ERROR] {} needs to be installed!", "feh" if use_feh else "nitrogen")
+
     
 if __name__ == "__main__":
     sys.exit(console())
