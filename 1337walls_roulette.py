@@ -8,7 +8,7 @@ import urllib.parse
 from subprocess import call
 from PIL import Image, ImageFilter
 
-__version__ = '0.1.5'
+__version__ = '0.1.6'
 __author__ = 'vanita5'
 
 __api_url__ = 'http://1337walls.w8l.org/api/?'
