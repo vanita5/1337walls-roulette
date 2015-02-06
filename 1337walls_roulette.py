@@ -4,13 +4,15 @@ import os
 import sys
 import argparse
 import requests
+import urllib.parse
 from subprocess import call
 from PIL import Image, ImageFilter
 
 __version__ = '0.1.5'
 __author__ = 'vanita5'
 
-__api_url__ = 'http://1337walls.w8l.org/api/?rows=image&count=1&order_by=rand&format=raw'
+__api_url__ = 'http://1337walls.w8l.org/api/?'
+__api_params__ = { 'rows': '', 'count': 1, 'order_by': 'rand', 'format': 'raw', 'client': 'de.vanita5.1337wallsroulette' }
 __home_dir__ = os.path.expanduser("~") + '/.config/1337walls/'
 
 DEBUG = False
@@ -35,6 +37,7 @@ def console():
     parser.add_argument("--version", action='version', version="%(prog)s {}".format(__version__))
     parser.add_argument("-v", "--verbose", dest="verbose", action='store_true', help="show output")
     parser.add_argument("-b", "--blur", dest="blur", action='store_true', help="blur the image")
+    parser.add_argument("-r", "--resolution", dest="resolution", help="270p, 720p or 1080p")
     parser.add_argument("--debug", dest="debug", action='store_true', help="turn on more verbose output")
     parser.add_argument("--dry", dest="dry", action='store_true', help="dry run, does not run nitrogen/feh")
     parser.add_argument("--use-feh", dest="feh", action='store_true', help="use feh to set the wallpaper (standard: nitrogen)")
@@ -46,20 +49,26 @@ def console():
     DEBUG = args.debug
     VERBOSE = args.verbose
     blur = args.blur
+    resolution = args.resolution
     dry = args.dry
     use_feh = args.feh
+
+    if resolution not in ["270p", "720p", "1080p"]:
+        resolution = "1080p"
+
+    __api_params__["rows"] = resolution
     
     if not os.path.exists(__home_dir__):
         console_debug("Creating directory {}", __home_dir__)
         os.makedirs(__home_dir__)    
-    
+
     console_out("Lurking on http://1337walls.w8l.org/...")
-    r = requests.get(__api_url__)
+    r = requests.get(__api_url__ + urllib.parse.urlencode(__api_params__))
     
     if r.status_code != 200:
         console_out("Could not connect to the 1337walls API: {}", r.status_code)
         return
-        
+
     console_out("Downloading image ({})", r.text)
     r = requests.get(r.text, stream=True)
     

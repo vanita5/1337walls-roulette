@@ -28,6 +28,7 @@ Options:
 
     --version           Display version
     -b, --blur          Blur the wallpaper
+    -r, --resolution    270p, 720p or 1080p
     -v, --verbose       Verbose output
     --debug             Even more output, for debug purposes
     --use-feh           Use feh to set your wallpaper instead of nitrogen (standard)
