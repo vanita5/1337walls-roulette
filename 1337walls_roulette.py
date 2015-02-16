@@ -4,7 +4,7 @@ import os
 import sys
 import argparse
 import requests
-import urllib.parse
+from urllib import urlencode
 from subprocess import call
 from PIL import Image, ImageFilter
 
@@ -63,7 +63,7 @@ def console():
         os.makedirs(__home_dir__)    
 
     console_out("Lurking on http://1337walls.w8l.org/...")
-    r = requests.get(__api_url__ + urllib.parse.urlencode(__api_params__))
+    r = requests.get(__api_url__ + urlencode(__api_params__))
     
     if r.status_code != 200:
         console_out("Could not connect to the 1337walls API: {}", r.status_code)
